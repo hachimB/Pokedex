@@ -1,1 +1,1 @@
-A Pokedex builds in a command-line REPL with Go.
+# Pokedex builds in a command-line REPL with Go.
