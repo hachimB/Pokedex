@@ -186,9 +186,17 @@ func commandCatch(p *config, args []string) error {
 		c := rand.Intn(pokemon.BaseExperience)
 		fmt.Printf("Throwing a Pokeball at %s...\n", args[0])
 		if c < pokemon.BaseExperience / 4 {
+			if p.pokedex[pokemon.Name] != nil {
+				fmt.Printf("%s has already been caught!\n", args[0])
+				return fmt.Errorf("Pokemon already cautch")
+			}
 			fmt.Printf("%s was caught!\n", args[0])
 			p.pokedex[pokemon.Name] = pokemon
 		} else {
+			if p.pokedex[pokemon.Name] != nil {
+				fmt.Printf("%s has already been caught!\n", args[0])
+				return fmt.Errorf("Pokemon already cautch")
+			}
 			fmt.Printf("%s escaped!\n", args[0])
 		}
 	} else {
@@ -222,6 +230,46 @@ func commandCatch(p *config, args []string) error {
 			return err
 		}
 		p.cache.Add(url, data)
+	}
+	return nil
+}
+
+func commandInspect(p *config, args []string) error {
+	if len(args) == 0 {
+		fmt.Println("Please add pokemon's name")
+		return fmt.Errorf("Please add pokemon's name or ID")
+	}
+	pokemon := p.pokedex
+	if pokemon[args[0]] == nil {
+		fmt.Println("you have not caught that pokemon")
+		return fmt.Errorf("Pokemon not caught")
+	} else {
+	fmt.Printf("Name: %s\nHeight: %d\nWeight: %d\n", pokemon[args[0]].Name, pokemon[args[0]].Height, pokemon[args[0]].Weight)
+	fmt.Print("Stats:")
+	for _, s := range(pokemon[args[0]].Stats) {
+		fmt.Printf("\n  -%s: %d\n", s.Stat.Name, s.BaseStat)
+	}
+	fmt.Print("Types:")
+	for _, t := range(pokemon[args[0]].Types) {
+		fmt.Printf("\n  - %s\n", t.Type.Name)
+	}
+	}
+	return nil
+}
+
+func commandPokedex(p *config, args []string) error {
+	if len(args) != 0 {
+		fmt.Println("Pokedex command does not take any argument")
+		fmt.Errorf("Pokedex command does not take any argument")
+	}
+	pokemon := p.pokedex
+	if len(pokemon) == 0 {
+		fmt.Println("Your Pokedex is empty.")
+	} else {
+		fmt.Println("Your Pokedex:")
+		for name := range pokemon {
+			fmt.Printf("- %s\n", name)
+		}
 	}
 	return nil
 }

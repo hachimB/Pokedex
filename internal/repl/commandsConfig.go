@@ -53,5 +53,15 @@ func registerCommands() map[string]cliCommand{
 			description: "Allows to catch a Pokemon by it's name",
 			callback: commandCatch,
 		},
+		"inspect" : {
+			name: "inspect",
+			description: "Prints the name, height, weight, stats and type(s) of the Pokemon",
+			callback: commandInspect,
+		},
+		"pokedex" : {
+			name: "pokedex",
+			description: "Lists all the names of the pokemon the user has caught",
+			callback: commandPokedex,
+		},
 	}
 }
